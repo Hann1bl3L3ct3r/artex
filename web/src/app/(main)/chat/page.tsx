@@ -1295,8 +1295,8 @@ export default function ChatPage() {
       if (failed.length > 0) {
         const details = failed
           .slice(0, 3)
-          .map((item) => `#${item.id}（${item.error}）`)
-          .join("；");
+          .map((item) => `#${item.id} (${item.error})`)
+          .join("; ");
         toast.error(`${failed.length} conversations failed to delete: ${details}${failed.length > 3 ? " and more" : ""}`);
       }
       setBulkDeleteOpen(false);
@@ -1371,7 +1371,7 @@ export default function ChatPage() {
                   <SelectItem value="all">All agents</SelectItem>
                   {agentFilterOptions.map((agent) => (
                     <SelectItem key={agent.key} value={`agent:${agent.key}`}>
-                      {agent.name}（{agent.count}）
+                      {agent.name} ({agent.count})
                     </SelectItem>
                   ))}
                 </SelectGroup>
