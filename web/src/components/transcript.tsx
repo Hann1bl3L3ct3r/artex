@@ -182,7 +182,7 @@ function toolInputText(tool: string, raw: string): string {
 }
 
 // InterceptCard renders an inline intercept_request approval card. The pending_id
-// is extracted from the summary (format: "工具 X 请求审批 (#N)" — backend-provided)
+// is extracted from the summary (format: "Tool X requests approval (#N)" — backend-provided)
 // so buttons are available immediately without waiting for the detail load.
 function InterceptCard({
   step,
@@ -191,14 +191,15 @@ function InterceptCard({
   step: Activity;
   getDetail: (seq: number) => Promise<string>;
 }) {
-  // extract pending_id from summary: "工具 Bash 请求审批 (#42)" (backend-provided)
+  // extract pending_id from summary: "Tool Bash requests approval (#42)" (backend-provided)
   const pendingId = React.useMemo(() => {
     const m = /\(#(\d+)\)/.exec(step.summary);
     return m ? parseInt(m[1], 10) : null;
   }, [step.summary]);
 
   const toolName = React.useMemo(() => {
-    const m = /工具\s+(\S+)\s+请求/.exec(step.summary);
+    // Legacy summaries stored before the English backend read "工具 X 请求审批 (#N)".
+    const m = /(?:Tool|工具)\s+(\S+)\s+(?:requests|请求)/.exec(step.summary);
     return m ? m[1] : step.summary;
   }, [step.summary]);
 

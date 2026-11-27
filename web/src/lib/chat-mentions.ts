@@ -1,13 +1,13 @@
 export const mentionKinds = [
-  { kind: "finding", label: "漏洞", alias: "finding" },
-  { kind: "asset", label: "资产", alias: "asset" },
-  { kind: "company", label: "企业", alias: "company" },
-  { kind: "endpoint", label: "接口", alias: "api" },
+  { kind: "finding", label: "Finding", alias: "finding" },
+  { kind: "asset", label: "Asset", alias: "asset" },
+  { kind: "company", label: "Company", alias: "company" },
+  { kind: "endpoint", label: "Endpoint", alias: "api" },
   { kind: "ip", label: "IP", alias: "ip" },
-  { kind: "app", label: "应用", alias: "app" },
-  { kind: "root_domain", label: "域名", alias: "domain" },
-  { kind: "subdomain", label: "子域名", alias: "subdomain" },
-  { kind: "service", label: "服务", alias: "service" },
+  { kind: "app", label: "App", alias: "app" },
+  { kind: "root_domain", label: "Domain", alias: "domain" },
+  { kind: "subdomain", label: "Subdomain", alias: "subdomain" },
+  { kind: "service", label: "Service", alias: "service" },
 ] as const;
 
 export type MentionKind = (typeof mentionKinds)[number]["kind"];
@@ -43,20 +43,21 @@ export function mentionSearch(query: string) {
 }
 
 export function mentionToken(item: ChatMention) {
-  const kind = mentionKinds.find((entry) => entry.kind === item.kind)?.label ?? "资产";
+  const kind = mentionKinds.find((entry) => entry.kind === item.kind)?.label ?? "Asset";
   const label = item.label
-    .replace(/[[\]]/g, (char) => (char === "[" ? "（" : "）"))
+    .replace(/[[\]]/g, (char) => (char === "[" ? "(" : ")"))
     .replace(/\s+/g, " ")
     .slice(0, 100);
   return `@[${kind}#${item.id} ${label}]`;
 }
 
 export function selectedMentions(value: string) {
-  return [...value.matchAll(/@\[(漏洞|资产|企业|接口|IP|应用|域名|子域名|服务)#([0-9]+)(?: ([^\]\r\n]*))?\]/g)].map(
-    (match) => ({
-      token: match[0],
-      label: `${match[1]} #${match[2]}${match[3] ? ` · ${match[3]}` : ""}`,
-      start: match.index,
-    }),
-  );
+  // The Chinese kind names are the legacy token spelling still present in old drafts and history.
+  const pattern =
+    /@\[(finding|asset|company|endpoint|ip|app|domain|subdomain|service|漏洞|资产|企业|接口|应用|域名|子域名|服务)#([0-9]+)(?: ([^\]\r\n]*))?\]/gi;
+  return [...value.matchAll(pattern)].map((match) => ({
+    token: match[0],
+    label: `${match[1]} #${match[2]}${match[3] ? ` · ${match[3]}` : ""}`,
+    start: match.index,
+  }));
 }

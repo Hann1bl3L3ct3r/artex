@@ -145,7 +145,7 @@ function fmtBytes(n: number): string {
 
 // UPLOAD_MARKER labels the auto-appended block of uploaded-file paths inside the task
 // description, so re-uploads append under the same block instead of adding a new header.
-const UPLOAD_MARKER = "【上传文件（绝对路径）】";
+const UPLOAD_MARKER = "[Uploaded files (absolute paths)]";
 
 // appendUploads folds newly-uploaded files' ABSOLUTE paths into the description as a
 // Read/Bash-friendly manifest — the worker opens them by path. Keeps one marked block:
@@ -1687,7 +1687,7 @@ function TaskArchivesPanel({ onChanged }: { onChanged: () => void }) {
         let restored = false;
         states.forEach((state, index) => {
           if (state.status !== "rejected" || !(state.reason instanceof Error)) return;
-          if (!state.reason.message.includes("归档不存在")) return;
+          if (!state.reason.message.includes("archive not found")) return;
           pendingRestoreIDs.current.delete(pending[index]);
           restored = true;
         });

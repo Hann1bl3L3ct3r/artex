@@ -2433,7 +2433,7 @@ function route(m: string, path: string, seg: string[], q: URLSearchParams, b: Re
     if (decisionSource && !["model", "rule", "unknown"].includes(decisionSource)) throw new Error("Invalid decision source");
     const filtered = mockInterceptHistory.filter((row) => {
       const source =
-        row.decision_source || (row.rule_id ? "rule" : row.reason?.startsWith("[模型]") ? "model" : "unknown");
+        row.decision_source || (row.rule_id ? "rule" : row.reason && /^\[(?:Model|模型)\]/.test(row.reason) ? "model" : "unknown");
       return (
         (seg[1] !== "task" || row.task_id === decodeURIComponent(seg[2])) &&
         (!status || row.status === status) &&

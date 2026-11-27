@@ -80,10 +80,28 @@ changes below. The web UI source is unchanged.
 
 10. **English interface and documentation** — the web console's user-visible
     strings and comments, agent-facing skills, shell/script comments, and
-    project documentation are translated to English. Backend-generated log and
-    error messages remain in their original language in this release; the UI
-    translates its own labels, states, and validation text. Protocol values,
-    parser tokens, and API field names were not renamed.
+    project documentation are translated to English. The Go backend is
+    translated as well: agent system prompts, tool and parameter descriptions,
+    API error messages, log lines, notification and report text, seeded rules,
+    code comments, and tests. API field names and protocol values were not
+    renamed. A few backend-generated markers that the UI or a parser matches
+    were translated on both sides (`[Model]` approval-reason prefix, the
+    `Actual operation: …; Consequence if successful: …; Matched rule: …`
+    review verdict, `@[Finding#12 …]` chat references); the old Chinese
+    spellings are still accepted when reading persisted rows.
+
+    Chinese is kept only where it is functional: keywords that match external
+    Chinese content (provider quota errors, ICP filing input, login-state text
+    on target sites), multi-byte test fixtures, and literals compared against
+    rows written by earlier builds.
+
+    Databases created by an earlier Chinese-language build are switched over
+    once at startup (`seeded_defaults_english_v1`): built-in agent prompts get
+    the English default appended as a new version (the previous version stays
+    in the prompt history), built-in tool descriptions are refreshed, and
+    seeded rule names are renamed. Text a user already rewrote in English is
+    left alone. Historical records (old conversations, findings, activity
+    logs) are not rewritten.
 
 The online-update and API-recon changes below are additional deliberate
 differences. No v0.3.30 application upgrade is included.

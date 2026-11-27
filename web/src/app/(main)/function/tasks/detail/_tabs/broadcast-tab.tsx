@@ -178,7 +178,7 @@ function relTime(ts: number, now: number): string {
   return `${Math.floor(sec / 86400)} d ago`;
 }
 
-const dayFmt = new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric", weekday: "short" });
+const dayFmt = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", weekday: "short" });
 const clockFmt = new Intl.DateTimeFormat("zh-CN", {
   hour: "2-digit",
   minute: "2-digit",
